@@ -1,16 +1,16 @@
 import 'package:flutter/cupertino.dart';
 
-class Pantalla1 extends StatefulWidget {
+class VerDatos extends StatefulWidget {
   @override
-  _Pantalla1State createState() => _Pantalla1State();
+  VerDatosState createState() => VerDatosState();
 }
 
-class _Pantalla1State extends State<Pantalla1> {
+class VerDatosState extends State<VerDatos> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text('Home'),
+        middle: Text('Ver Datos'),
       ),
       child: Center(
           child:
