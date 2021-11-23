@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:trabajo_lps/utils.dart';
 
 class Formulario extends StatefulWidget {
@@ -8,12 +9,20 @@ class Formulario extends StatefulWidget {
 
 class VerDatosState extends State<Formulario> {
   String nombre = "";
-  int edad = 0;
+  double edad = 0.0;
   String mascota = "Ninguna";
+  int? sexo = 0;
+  bool esEstudiante = false;
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
+          trailing: CupertinoButton(
+            padding: EdgeInsets.zero,
+            child: Text("Guardar"),
+            onPressed: popUp,
+          ),
           middle: Text('Formulario'),
         ),
         child: SafeArea(
@@ -30,7 +39,60 @@ class VerDatosState extends State<Formulario> {
                     placeholder: "Nombre y Apellidos",
                     onChanged: (value) => setState(() => this.nombre = value),
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Sexo: ",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      Spacer(),
+                      CupertinoSlidingSegmentedControl(
+                          padding: EdgeInsets.all(10),
+                          groupValue: sexo,
+                          children: {
+                            0: Text("Mujer"),
+                            1: Text("Hombre"),
+                            2: Text("Otro"),
+                          },
+                          onValueChanged: (value) {
+                            setState(() => this.sexo = value as int?);
+                          }),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Edad:",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Spacer(),
+                      CupertinoSlider(
+                        value: edad,
+                        onChanged: (edadNueva) {
+                          setState(() => edad = edadNueva);
+                        },
+                        min: 0.0,
+                        max: 100.0,
+                      ),
+                      Text(edad.toStringAsFixed(0)),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Es estudiante:",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Spacer(),
+                      CupertinoSwitch(
+                          value: esEstudiante,
+                          onChanged: (value) =>
+                              setState(() => esEstudiante = value)),
+                    ],
+                  ),
                   CupertinoButton.filled(
+                      padding: EdgeInsets.symmetric(horizontal: 134),
                       child: Text("Elegir mascota"),
                       onPressed: () {
                         showCupertinoModalPopup(
@@ -62,4 +124,6 @@ class VerDatosState extends State<Formulario> {
           children: mascotas.map((item) => Center(child: Text(item))).toList()),
     );
   }
+
+  void popUp() {}
 }
