@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:trabajo_lps/models/personas.dart';
 import 'package:trabajo_lps/screens/formulario.dart';
 import 'package:trabajo_lps/screens/ver_datos.dart';
 
@@ -8,6 +9,20 @@ class PaginaPrincipal extends StatefulWidget {
 }
 
 class _PaginaPrincipalState extends State<PaginaPrincipal> {
+  late ValueChanged<Persona> personaChange;
+  List<Persona> personaLista = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    personaChange = (value) {
+      setState(() {
+        personaLista.add(value);
+      });
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
@@ -22,11 +37,11 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
         tabBuilder: (context, index) {
           switch (index) {
             case 0:
-              return Formulario();
+              return Formulario(personaChange);
             case 1:
-              return VerDatos();
+              return VerDatos(personaLista);
             default:
-              return Formulario();
+              return Formulario(personaChange);
           }
         });
   }

@@ -1,14 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:trabajo_lps/models/personas.dart';
 import 'package:trabajo_lps/utils.dart';
 
 class Formulario extends StatefulWidget {
+  final ValueChanged<Persona> personaChange;
+
+  Formulario(this.personaChange);
+
   @override
   VerDatosState createState() => VerDatosState();
 }
 
 class VerDatosState extends State<Formulario> {
-  String nombre = "";
+  TextEditingController nombre = TextEditingController();
   double edad = 0.0;
   String mascota = "Ninguna";
   int? sexo = 0;
@@ -35,9 +40,10 @@ class VerDatosState extends State<Formulario> {
                 runSpacing: 20,
                 children: <Widget>[
                   CupertinoTextField(
+                    clearButtonMode: OverlayVisibilityMode.editing,
                     padding: EdgeInsets.all(16),
                     placeholder: "Nombre y Apellidos",
-                    onChanged: (value) => setState(() => this.nombre = value),
+                    controller: nombre,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -51,7 +57,7 @@ class VerDatosState extends State<Formulario> {
                           children: {
                             0: Text("Mujer"),
                             1: Text("Hombre"),
-                            2: Text("Otro"),
+                            2: Text("No binario"),
                           },
                           onValueChanged: (value) {
                             setState(() => this.sexo = value as int?);
@@ -74,7 +80,7 @@ class VerDatosState extends State<Formulario> {
                         min: 0.0,
                         max: 100.0,
                       ),
-                      Text(edad.toStringAsFixed(0)),
+                      Text(edad.toInt().toString()),
                     ],
                   ),
                   Row(
@@ -100,7 +106,7 @@ class VerDatosState extends State<Formulario> {
                             builder: (context) => CupertinoActionSheet(
                                   actions: [elegirMascota()],
                                   cancelButton: CupertinoActionSheetAction(
-                                    child: Text("Volver"),
+                                    child: Text("Guardar"),
                                     onPressed: () => Navigator.pop(context),
                                   ),
                                 ));
@@ -125,5 +131,47 @@ class VerDatosState extends State<Formulario> {
     );
   }
 
-  void popUp() {}
+  void popUp() {
+    showCupertinoDialog<void>(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: const Text('Aviso'),
+        content: const Text('¿Desea guardar esta persona?'),
+        actions: <CupertinoDialogAction>[
+          CupertinoDialogAction(
+            child: const Text('No'),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          CupertinoDialogAction(
+            child: const Text('Sí'),
+            onPressed: () {
+              if (nombre != "") {
+                String sexoString = "";
+
+                if (sexo == 0) {
+                  sexoString = "Mujer";
+                } else if (sexo == 1) {
+                  sexoString = "Hombre";
+                } else {
+                  sexoString = "No Binario";
+                }
+                Persona p = Persona(nombre.text, edad.toInt(), mascota,
+                    sexoString, esEstudiante);
+
+                widget.personaChange(p);
+                nombre.clear();
+                edad = 0.0;
+                mascota = "Ninguna";
+                esEstudiante = false;
+                sexo = 0;
+                Navigator.pop(context);
+              }
+            },
+          )
+        ],
+      ),
+    );
+  }
 }
