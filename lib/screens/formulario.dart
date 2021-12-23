@@ -14,6 +14,7 @@ class Formulario extends StatefulWidget {
 
 class VerDatosState extends State<Formulario> {
   TextEditingController nombre = TextEditingController();
+  TextEditingController descripcion = TextEditingController();
   double edad = 0.0;
   String mascota = "Ninguna";
   int? sexo = 0;
@@ -33,7 +34,7 @@ class VerDatosState extends State<Formulario> {
         child: SafeArea(
           child: Container(
               padding: EdgeInsets.all(16),
-              alignment: Alignment.center,
+              alignment: Alignment.topCenter,
               child: Wrap(
                 alignment: WrapAlignment.center,
                 spacing: 20, // to apply margin in the main axis of the wrap
@@ -44,6 +45,13 @@ class VerDatosState extends State<Formulario> {
                     padding: EdgeInsets.all(16),
                     placeholder: "Nombre y Apellidos",
                     controller: nombre,
+                  ),
+                  CupertinoTextField(
+                    maxLines: 8,
+                    clearButtonMode: OverlayVisibilityMode.editing,
+                    padding: EdgeInsets.all(16),
+                    placeholder: "Descripción",
+                    controller: descripcion,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -158,7 +166,7 @@ class VerDatosState extends State<Formulario> {
                   sexoString = "No Binario";
                 }
                 Persona p = Persona(nombre.text, edad.toInt(), mascota,
-                    sexoString, esEstudiante);
+                    sexoString, esEstudiante, descripcion.text);
 
                 widget.personaChange(p);
                 nombre.clear();
@@ -166,6 +174,7 @@ class VerDatosState extends State<Formulario> {
                 mascota = "Ninguna";
                 esEstudiante = false;
                 sexo = 0;
+                descripcion.clear();
                 Navigator.pop(context);
               }
             },

@@ -4,6 +4,8 @@ class Persona {
   String mascota;
   String sexo;
   bool esEstudiante;
+  String descripcion;
 
-  Persona(this.nombre, this.edad, this.mascota, this.sexo, this.esEstudiante);
+  Persona(this.nombre, this.edad, this.mascota, this.sexo, this.esEstudiante,
+      this.descripcion);
 }
